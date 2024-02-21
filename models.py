@@ -49,6 +49,9 @@ class FlightModel(BaseModel):
     business_seat_cost: int
     first_class_cost: int
 
+    seat_type: str
+    num_seats: int
+
     class Config:
         from_attributes = True
 
@@ -56,6 +59,10 @@ class FlightInput(BaseModel):
     origin: str
     destination: str
     departure_date: date
+
+    flight_id: int
+    seat_type: str
+    num_seats: int
 
 class FlightSearchCriteria(BaseModel):
     origin: str
@@ -70,6 +77,10 @@ class FlightSearchCriteria(BaseModel):
     min_cost: Optional[int] = None
     max_cost: Optional[int] = None
     
+class FlightBookCriteria(BaseModel):
+    flight_id: int
+    seat_type: str
+    num_seats: int
 
 # Create the database
 engine = create_engine(DATABASE_URL)

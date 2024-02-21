@@ -69,7 +69,11 @@ def generate_flights(flight_input, num_flights, db: Session):
             open_seats_first_class =    open_seats_first_class,
             economy_seat_cost =         economy_seat_cost,
             business_seat_cost =        business_seat_cost,
-            first_class_cost =          first_class_cost
+            first_class_cost =          first_class_cost,
+
+            flight_id =                 flight_input.flight_id,
+            seat_type =                 flight_input.seat_type,
+            num_seats =                 flight_input.num_seats
         )
 
         db.add(new_flight)
@@ -284,4 +288,22 @@ def search_flights(**params):
     response = requests.get(url, headers={'accept': 'application/json'})
 
     # Returning the JSON response
+    return response.json()
+
+def book_flights(**params):
+    
+    criteria = FlightSearchCriteria(**params)
+    
+    url = f"http://127.0.0.1:8000/book_flight/?"
+
+    # Add parameter, I did this to be more clean
+    if criteria.flight_id:
+        url += f"&flight_id={criteria.flight_id}"
+    if criteria.seat_type:
+        url += f"&seat_type={criteria.seat_type}"
+    if criteria.num_seats:
+        url += f"&num_seats={criteria.num_seats}"
+
+    url += "&page=1&page_size=10"
+    response = requests.get(url, headers={'accept': 'application/json'})
     return response.json()
